@@ -8,23 +8,24 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js'
   },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js', '.jsx']
+  },
   module: {
     rules: [
       {
-        test: /\.?js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env', '@babel/preset-react']
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-react']
+            }
           }
-        }
+        ]
       },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/
-      }
+      { test: /\.(ts|tsx)?$/, loader: 'ts-loader', exclude: /node_modules/ }
     ]
   },
   plugins: [

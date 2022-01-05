@@ -1,8 +1,5 @@
 import { render } from 'react-dom';
-
-const App = () => {
-  return <div>Trello like</div>;
-};
+import Board from './components/Board';
 
 const rootElement = document.getElementById('root');
-render(<App />, rootElement);
+render(<Board />, rootElement);
