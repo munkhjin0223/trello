@@ -40,6 +40,7 @@ export default function QuoteApp() {
         onClick={() => {
           setState([...state, []]);
         }}
+        style={{ marginRight: '20px' }}
       >
         Add new group
       </button>
@@ -51,6 +52,8 @@ export default function QuoteApp() {
       >
         Add new item
       </button>
+      <br />
+      <br />
       <div style={{ display: 'flex' }}>
         <DragDropContext onDragEnd={onDragEnd}>
           {state.map((el, ind) => (

@@ -7,11 +7,10 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix",
     "dev": "webpack serve --",
     "build": "webpack",
     "predeploy": "yarn build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages-clean && gh-pages -d dist"
   },
   "dependencies": {
     "react": "^17.0.2",
