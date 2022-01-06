@@ -1,68 +1,82 @@
-import { Component } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { getItems, getItemStyle, getListStyle, reorder } from '../utils';
-export default class Board extends Component<any, any> {
-  constructor(props: any) {
-    super(props);
+import { useState } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
-    this.state = {
-      items: getItems(10)
-    };
+import { getItems, reorder, move, getListStyle } from '../utils';
+import Stage from './Stage';
 
-    this.onDragEnd = this.onDragEnd.bind(this);
-  }
+export default function QuoteApp() {
+  const [state, setState] = useState([getItems(10), getItems(5, 10)]);
 
-  onDragEnd(result: any) {
+  const onDragEnd = (result: any) => {
+    const { source, destination } = result;
+
     // dropped outside the list
-    if (!result.destination) {
+    if (!destination) {
       return;
     }
 
-    const items = reorder(
-      this.state.items,
-      result.source.index,
-      result.destination.index
-    );
+    const sInd = +source.droppableId;
+    const dInd = +destination.droppableId;
 
-    this.setState({
-      items
-    });
-  }
+    if (sInd === dInd) {
+      const items = reorder(state[sInd], source.index, destination.index);
+      const newState: any = [...state];
+      newState[sInd] = items;
+      setState(newState);
+    } else {
+      const newResult = move(state[sInd], state[dInd], source, destination);
+      const newState = [...state];
+      newState[sInd] = newResult[sInd];
+      newState[dInd] = newResult[dInd];
 
-  // Normally you would want to split things out into separate components.
-  // But in this example everything is just done in one place for simplicity
-  render() {
-    return (
-      <DragDropContext onDragEnd={this.onDragEnd}>
-        <Droppable droppableId='droppable'>
-          {(provided, snapshot) => (
-            <div
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              style={getListStyle(snapshot.isDraggingOver)}
-            >
-              {this.state.items.map((item: any, index: any) => (
-                <Draggable key={item.id} draggableId={item.id} index={index}>
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={getItemStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
-                    >
-                      {item.content}
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-    );
-  }
+      setState(newState.filter(group => group.length));
+    }
+  };
+
+  return (
+    <div>
+      <button
+        type='button'
+        onClick={() => {
+          setState([...state, []]);
+        }}
+      >
+        Add new group
+      </button>
+      <button
+        type='button'
+        onClick={() => {
+          setState([...state, getItems(1)]);
+        }}
+      >
+        Add new item
+      </button>
+      <div style={{ display: 'flex' }}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {state.map((el, ind) => (
+            <Droppable key={ind} droppableId={`${ind}`}>
+              {(provided, snapshot) => (
+                <div
+                  ref={provided.innerRef}
+                  style={getListStyle(snapshot.isDraggingOver)}
+                  {...provided.droppableProps}
+                >
+                  {el.map((item, index) => (
+                    <Stage
+                      item={item}
+                      index={index}
+                      ind={ind}
+                      state={state}
+                      setState={setState}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          ))}
+        </DragDropContext>
+      </div>
+    </div>
+  );
 }

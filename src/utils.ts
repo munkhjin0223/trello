@@ -1,11 +1,10 @@
 // fake data generator
-export const getItems = (count: number) =>
+export const getItems = (count: any, offset = 0) =>
   Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k}`,
-    content: `item ${k}`
+    id: `item-${k + offset}-${new Date().getTime()}`,
+    content: `item ${k + offset}`
   }));
 
-// a little function to help us with reordering the result
 export const reorder = (list: any, startIndex: any, endIndex: any) => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
@@ -14,6 +13,27 @@ export const reorder = (list: any, startIndex: any, endIndex: any) => {
   return result;
 };
 
+/**
+ * Moves an item from one list to another list.
+ */
+export const move = (
+  source: any,
+  destination: any,
+  droppableSource: any,
+  droppableDestination: any
+) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result: any = {};
+  result[droppableSource.droppableId] = sourceClone;
+  result[droppableDestination.droppableId] = destClone;
+
+  return result;
+};
 const grid = 8;
 
 export const getItemStyle = (isDragging: any, draggableStyle: any) => ({
