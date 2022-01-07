@@ -7,8 +7,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - run: |
+      - name: Install dependencies
+        run: |
           yarn install --frozen-lockfile
-          yarn tsc
+
+      - name: Lint
+        run: |
           yarn lint
+
+      - name: Tsc
+        run: |
+          yarn tsc
+
+      - name: Deploy
+        run: |
           yarn deploy
