@@ -8,6 +8,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2.1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: |
@@ -21,8 +23,18 @@ jobs:
         run: |
           yarn tsc
 
-      - name: Deploy
+      - name: Build
         run: |
-          git config user.email "munkhjin0223@gmail.com"
-          git config user.name "Munkhjin Badamkhatan"
-          yarn deploy
+          yarn build
+
+      - name: Pre deploy
+        run: |
+          gh-pages-clean
+
+      - name: Deploy
+        use: crazy-max/ghaction-github-pages@v1
+        with:
+          target_branch: gh-pages
+          build_dir: dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
