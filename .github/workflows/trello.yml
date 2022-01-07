@@ -1,11 +1,6 @@
 name: Trello workflow
 
-on:
-  push:
-    branches:
-      - 'main'
-    paths:
-      - '**'
+on: [push]
 
 jobs:
   runs-on: ubuntu-latest
