@@ -40,7 +40,7 @@ export default function QuoteApp() {
         onClick={() => {
           setState([...state, []]);
         }}
-        style={{ marginRight: '20px' }}
+        style={{ marginRight: '30px' }}
       >
         Add new group
       </button>
