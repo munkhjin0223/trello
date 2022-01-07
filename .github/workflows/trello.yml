@@ -3,10 +3,11 @@ name: Trello workflow
 on: [push]
 
 jobs:
-  runs-on: ubuntu-latest
+  deploy:
+    runs-on: ubuntu-latest
 
-  steps:
-    - run: yarn install --frozen-lockfile
-    - run: yarn tsc
-    - run: yarn lint
-    - run: yarn deploy
+    steps:
+      - run: yarn install --frozen-lockfile
+      - run: yarn tsc
+      - run: yarn lint
+      - run: yarn deploy
