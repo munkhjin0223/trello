@@ -7,5 +7,7 @@
     "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node"
-  }
+  },
+  "types": ["@emotion/react/types/css-prop"],
+  "include": ["src", "index.d.ts"]
 }

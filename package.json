@@ -13,14 +13,18 @@
     "deploy": "gh-pages-clean && gh-pages -d dist"
   },
   "dependencies": {
+    "file-loader": "^6.2.0",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@atlaskit/theme": "^12.1.0",
     "@babel/core": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@types/react": "^17.0.38",
     "@types/react-beautiful-dnd": "^13.1.2",
     "@types/react-dom": "^17.0.11",
