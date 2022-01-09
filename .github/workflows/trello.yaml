@@ -15,10 +15,6 @@ jobs:
         run: |
           yarn install --frozen-lockfile
 
-      - name: Lint
-        run: |
-          yarn lint
-
       - name: Tsc
         run: |
           yarn tsc
