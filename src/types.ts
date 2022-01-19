@@ -14,17 +14,24 @@ export type Author = {
   colors: AuthorColors;
 };
 
-export type Quote = {
+export type Item = {
   id: Id;
   content: string;
   author: Author;
+  columnId: string;
 };
 
-export type QuoteMap = {
-  [key: string]: Quote[];
+export type ItemMap = {
+  [key: string]: Item[];
 };
 
 export type Task = {
   id: Id;
   content: string;
+};
+
+export type WrapperType = {
+  isDraggingOver: boolean;
+  isDropDisabled: boolean;
+  isDraggingFrom: boolean;
 };

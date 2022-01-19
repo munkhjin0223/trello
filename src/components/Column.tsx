@@ -1,5 +1,3 @@
-// @flow
-import { Component } from 'react';
 import styled from '@emotion/styled';
 import { colors } from '@atlaskit/theme';
 import { grid, borderRadius } from '../constants';
@@ -8,9 +6,10 @@ import {
   DraggableProvided,
   DraggableStateSnapshot
 } from 'react-beautiful-dnd';
-import QuoteList from './QuoteList';
-import Title from './Title';
-import type { Quote } from '../types';
+import List from './List';
+import { AddNew, Title } from '../styles';
+import type { Item } from '../types';
+import { authors } from '../data';
 
 const Container = styled.div`
   margin: ${grid}px;
@@ -35,44 +34,62 @@ const Header = styled.div`
 
 type Props = {
   title: string;
-  quotes: Quote[];
+  items: Item[];
   index: number;
   isScrollable?: boolean;
   isCombineEnabled?: boolean;
   useClone?: boolean;
+  id: string;
+  addNew: (item: Item) => void;
 };
 
-export default class Column extends Component<Props> {
-  render() {
-    const title: string = this.props.title;
-    const quotes: Quote[] = this.props.quotes;
-    const index: number = this.props.index;
-    return (
-      <Draggable draggableId={title} index={index}>
-        {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-          <Container ref={provided.innerRef} {...provided.draggableProps}>
-            <Header isDragging={snapshot.isDragging}>
-              <Title
-                {...provided.dragHandleProps}
-                aria-label={`${title} quote list`}
-              >
-                {title}
-              </Title>
-            </Header>
-            <QuoteList
-              listId={title}
-              listType='QUOTE'
-              style={{
-                backgroundColor: snapshot.isDragging ? colors.G50 : null
-              }}
-              quotes={quotes}
-              internalScroll={this.props.isScrollable}
-              isCombineEnabled={Boolean(this.props.isCombineEnabled)}
-              useClone={Boolean(this.props.useClone)}
-            />
-          </Container>
-        )}
-      </Draggable>
-    );
-  }
-}
+export default ({
+  title,
+  items,
+  index,
+  isScrollable,
+  isCombineEnabled,
+  useClone,
+  addNew,
+  id
+}: Props) => {
+  return (
+    <Draggable draggableId={id} index={index}>
+      {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
+        <Container ref={provided.innerRef} {...provided.draggableProps}>
+          <Header isDragging={snapshot.isDragging}>
+            <Title
+              {...provided.dragHandleProps}
+              aria-label={`${title} item list`}
+            >
+              {title}
+            </Title>
+          </Header>
+          <List
+            listId={id}
+            listType='ITEM'
+            style={{
+              backgroundColor: snapshot.isDragging ? colors.G50 : null
+            }}
+            items={items}
+            internalScroll={isScrollable}
+            isCombineEnabled={Boolean(isCombineEnabled)}
+            useClone={Boolean(useClone)}
+          />
+          <AddNew
+            onClick={() =>
+              addNew({
+                id: Math.random().toString(),
+                author: authors[0],
+                content: 'New',
+                columnId: id
+              })
+            }
+          >
+            Add new
+          </AddNew>
+        </Container>
+      )}
+    </Draggable>
+  );
+};

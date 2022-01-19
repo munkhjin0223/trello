@@ -1,11 +1,13 @@
-// fake data generator
-export const getItems = (count: any, offset = 0) =>
-  Array.from({ length: count }, (v, k) => k).map(k => ({
-    id: `item-${k + offset}-${new Date().getTime()}`,
-    content: `item ${k + offset}`
-  }));
+import { colors } from '@atlaskit/theme';
+import type { AuthorColors, Item, ItemMap } from './types';
+import type { DraggableLocation } from 'react-beautiful-dnd';
 
-export const reorder = (list: any, startIndex: any, endIndex: any) => {
+// a little function to help us with reordering the result
+export const reorder = (
+  list: any[],
+  startIndex: number,
+  endIndex: number
+): any[] => {
   const result = Array.from(list);
   const [removed] = result.splice(startIndex, 1);
   result.splice(endIndex, 0, removed);
@@ -13,44 +15,85 @@ export const reorder = (list: any, startIndex: any, endIndex: any) => {
   return result;
 };
 
-/**
- * Moves an item from one list to another list.
- */
-export const move = (
-  source: any,
-  destination: any,
-  droppableSource: any,
-  droppableDestination: any
-) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result: any = {};
-  result[droppableSource.droppableId] = sourceClone;
-  result[droppableDestination.droppableId] = destClone;
-
-  return result;
+type ReorderItemMapArgs = {
+  itemMap: ItemMap;
+  source: DraggableLocation;
+  destination: DraggableLocation;
 };
-const grid = 8;
 
-export const getItemStyle = (isDragging: any, draggableStyle: any) => ({
-  // some basic styles to make the items look a bit nicer
-  userSelect: 'none',
-  padding: grid * 2,
-  margin: `0 0 ${grid}px 0`,
+type ReorderItemMapResult = {
+  itemMap: ItemMap;
+};
 
-  // change background colour if dragging
-  background: isDragging ? 'lightgreen' : 'grey',
+export const reorderItemMap = ({
+  itemMap,
+  source,
+  destination
+}: ReorderItemMapArgs): ReorderItemMapResult => {
+  const current: Item[] = [...itemMap[source.droppableId]];
+  const next: Item[] = [...itemMap[destination.droppableId]];
+  const target: Item = current[source.index];
 
-  // styles we need to apply on draggables
-  ...draggableStyle
-});
+  // moving to same list
+  if (source.droppableId === destination.droppableId) {
+    const reordered: Item[] = reorder(current, source.index, destination.index);
+    const result: ItemMap = {
+      ...itemMap,
+      [source.droppableId]: reordered
+    };
+    return {
+      itemMap: result
+    };
+  }
 
-export const getListStyle = (isDraggingOver: any) => ({
-  background: isDraggingOver ? 'lightblue' : 'lightgrey',
-  padding: grid,
-  width: 250
-});
+  // moving to different list
+
+  // remove from original
+  current.splice(source.index, 1);
+  // insert into next
+  next.splice(destination.index, 0, target);
+
+  const result: ItemMap = {
+    ...itemMap,
+    [source.droppableId]: current,
+    [destination.droppableId]: next
+  };
+
+  return {
+    itemMap: result
+  };
+};
+
+export const getListBackgroundColor = (
+  isDraggingOver: boolean,
+  isDraggingFrom: boolean
+): string => {
+  if (isDraggingOver) {
+    return colors.R50;
+  }
+  if (isDraggingFrom) {
+    return colors.T50;
+  }
+  return colors.N30;
+};
+
+export const getItemBackgroundColor = (
+  isDragging: boolean,
+  isGroupedOver: boolean,
+  authorColors: AuthorColors
+) => {
+  if (isDragging) {
+    return authorColors.soft;
+  }
+
+  if (isGroupedOver) {
+    return colors.N30;
+  }
+
+  return colors.N0;
+};
+
+export const getBorderColor = (
+  isDragging: boolean,
+  authorColors: AuthorColors
+) => (isDragging ? authorColors.hard : 'transparent');

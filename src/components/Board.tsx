@@ -1,4 +1,3 @@
-// @flow
 import { Global, css } from '@emotion/react';
 import { Component, Fragment } from 'react';
 import {
@@ -11,9 +10,10 @@ import {
 
 import styled from '@emotion/styled';
 import { colors } from '@atlaskit/theme';
-import type { QuoteMap, Quote } from '../types';
+import type { ItemMap, Item } from '../types';
 import Column from './Column';
-import reorder, { reorderQuoteMap } from '../reorder';
+import { reorder, reorderItemMap } from '../utils';
+import { columns } from '../data';
 
 const ParentContainer = styled.div`
   height: ${({ height }: { height: string }) => height};
@@ -30,7 +30,7 @@ const Container = styled.div`
 `;
 
 type Props = {
-  initial: QuoteMap;
+  initial: ItemMap;
   withScrollableColumns?: boolean;
   isCombineEnabled?: boolean;
   containerHeight?: string;
@@ -38,7 +38,7 @@ type Props = {
 };
 
 type State = {
-  columns: QuoteMap;
+  itemMap: ItemMap;
   ordered: string[];
 };
 
@@ -49,7 +49,7 @@ export default class Board extends Component<Props, State> {
   };
 
   state: State = {
-    columns: this.props.initial,
+    itemMap: this.props.initial,
     ordered: Object.keys(this.props.initial)
   };
 
@@ -64,14 +64,14 @@ export default class Board extends Component<Props, State> {
         return;
       }
 
-      const column: Quote[] = this.state.columns[result.source.droppableId];
-      const withQuoteRemoved: Quote[] = [...column];
-      withQuoteRemoved.splice(result.source.index, 1);
-      const columns: QuoteMap = {
-        ...this.state.columns,
-        [result.source.droppableId]: withQuoteRemoved
+      const column: Item[] = this.state.itemMap[result.source.droppableId];
+      const withItemRemoved: Item[] = [...column];
+      withItemRemoved.splice(result.source.index, 1);
+      const itemMap: ItemMap = {
+        ...this.state.itemMap,
+        [result.source.droppableId]: withItemRemoved
       };
-      this.setState({ columns });
+      this.setState({ itemMap });
       return;
     }
 
@@ -106,20 +106,29 @@ export default class Board extends Component<Props, State> {
       return;
     }
 
-    const data = reorderQuoteMap({
-      quoteMap: this.state.columns,
+    const data = reorderItemMap({
+      itemMap: this.state.itemMap,
       source,
       destination
     });
 
+    this.setState({ itemMap: data.itemMap });
+  };
+
+  addNew = (item: Item) => {
+    const itemMap = this.state.itemMap;
+
     this.setState({
-      columns: data.quoteMap
+      itemMap: {
+        ...this.state.itemMap,
+        [item.columnId]: [...itemMap[item.columnId], item]
+      }
     });
   };
 
   render() {
-    const columns: QuoteMap = this.state.columns;
-    const ordered: string[] = this.state.ordered;
+    const { itemMap, ordered } = this.state;
+
     const {
       containerHeight,
       useClone,
@@ -139,10 +148,12 @@ export default class Board extends Component<Props, State> {
           <Container ref={provided.innerRef} {...provided.droppableProps}>
             {ordered.map((key: string, index: number) => (
               <Column
+                addNew={this.addNew}
                 key={key}
                 index={index}
-                title={key}
-                quotes={columns[key]}
+                id={key}
+                title={columns.find(c => c.id === key).name}
+                items={itemMap[key]}
                 isScrollable={withScrollableColumns}
                 isCombineEnabled={isCombineEnabled}
                 useClone={useClone}

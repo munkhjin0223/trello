@@ -1,7 +1,4 @@
-// @flow
 import { memo } from 'react';
-import styled from '@emotion/styled';
-import { colors } from '@atlaskit/theme';
 import {
   Droppable,
   Draggable,
@@ -10,72 +7,20 @@ import {
   DraggableProvided,
   DraggableStateSnapshot
 } from 'react-beautiful-dnd';
-import QuoteItem from './QuoteItem';
-import { grid } from '../constants';
-import Title from './Title';
-import type { Quote } from '../types';
-
-export const getBackgroundColor = (
-  isDraggingOver: boolean,
-  isDraggingFrom: boolean
-): string => {
-  if (isDraggingOver) {
-    return colors.R50;
-  }
-  if (isDraggingFrom) {
-    return colors.T50;
-  }
-  return colors.N30;
-};
-
-type WrapperType = {
-  isDraggingOver: boolean;
-  isDropDisabled: boolean;
-  isDraggingFrom: boolean;
-};
-
-const Wrapper = styled.div`
-  background-color: ${(props: WrapperType) =>
-    getBackgroundColor(props.isDraggingOver, props.isDraggingFrom)};
-  display: flex;
-  flex-direction: column;
-  opacity: ${({ isDropDisabled }: WrapperType) =>
-    isDropDisabled ? 0.5 : 'inherit'};
-  padding: ${grid}px;
-  border: ${grid}px;
-  padding-bottom: 0;
-  transition: background-color 0.2s ease, opacity 0.1s ease;
-  user-select: none;
-  width: 250px;
-`;
-
-const scrollContainerHeight: number = 250;
-
-const DropZone = styled.div`
-  /* stop the list collapsing when empty */
-  min-height: ${scrollContainerHeight}px;
-
-  /*
-    not relying on the items for a margin-bottom
-    as it will collapse when the list is empty
-  */
-  padding-bottom: ${grid}px;
-`;
-
-const ScrollContainer = styled.div`
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: ${scrollContainerHeight}px;
-`;
-
-/* stylelint-disable block-no-empty */
-const Container = styled.div``;
-/* stylelint-enable */
+import ItemComponent from './Item';
+import {
+  ListContainer,
+  DropZone,
+  ScrollContainer,
+  Title,
+  Wrapper
+} from '../styles';
+import type { Item } from '../types';
 
 type Props = {
   listId?: string;
   listType?: string;
-  quotes: Quote[];
+  items: Item[];
   title?: string;
   internalScroll?: boolean;
   scrollContainerStyle?: Object;
@@ -88,22 +33,22 @@ type Props = {
   useClone?: boolean;
 };
 
-type QuoteListProps = {
-  quotes: Quote[];
+type ItemListProps = {
+  items: Item[];
 };
 
-const InnerQuoteList = memo(function InnerQuoteList(props: QuoteListProps) {
+const InnerList = memo(function InnerList(props: ItemListProps) {
   return (
     <>
-      {props.quotes.map((quote: Quote, index: number) => (
-        <Draggable key={quote.id} draggableId={quote.id} index={index}>
+      {props.items.map((item: Item, index: number) => (
+        <Draggable key={item.id} draggableId={item.id} index={index}>
           {(
             dragProvided: DraggableProvided,
             dragSnapshot: DraggableStateSnapshot
           ) => (
-            <QuoteItem
-              key={quote.id}
-              quote={quote}
+            <ItemComponent
+              key={item.id}
+              item={item}
               isDragging={dragSnapshot.isDragging}
               isGroupedOver={Boolean(dragSnapshot.combineTargetFor)}
               provided={dragProvided}
@@ -117,26 +62,26 @@ const InnerQuoteList = memo(function InnerQuoteList(props: QuoteListProps) {
 
 type InnerListProps = {
   dropProvided: DroppableProvided;
-  quotes: Quote[];
+  items: Item[];
   title?: string;
 };
 
-function InnerList(props: InnerListProps) {
-  const { quotes, dropProvided } = props;
+function InnerListContainer(props: InnerListProps) {
+  const { items, dropProvided } = props;
   const title = props.title ? <Title>{props.title}</Title> : null;
 
   return (
-    <Container>
+    <ListContainer>
       {title}
       <DropZone ref={dropProvided.innerRef}>
-        <InnerQuoteList quotes={quotes} />
+        <InnerList items={items} />
         {dropProvided.placeholder}
       </DropZone>
-    </Container>
+    </ListContainer>
   );
 }
 
-export default function QuoteList(props: Props) {
+export default (props: Props) => {
   const {
     ignoreContainerClipping,
     internalScroll,
@@ -146,7 +91,7 @@ export default function QuoteList(props: Props) {
     listId = 'LIST',
     listType,
     style,
-    quotes,
+    items,
     title,
     useClone
   } = props;
@@ -161,8 +106,8 @@ export default function QuoteList(props: Props) {
       renderClone={
         useClone
           ? (provided, snapshot, descriptor) => (
-              <QuoteItem
-                quote={quotes[descriptor.source.index]}
+              <ItemComponent
+                item={items[descriptor.source.index]}
                 provided={provided}
                 isDragging={snapshot.isDragging}
                 isClone
@@ -184,15 +129,15 @@ export default function QuoteList(props: Props) {
         >
           {internalScroll ? (
             <ScrollContainer style={scrollContainerStyle}>
-              <InnerList
-                quotes={quotes}
+              <InnerListContainer
+                items={items}
                 title={title}
                 dropProvided={dropProvided}
               />
             </ScrollContainer>
           ) : (
-            <InnerList
-              quotes={quotes}
+            <InnerListContainer
+              items={items}
               title={title}
               dropProvided={dropProvided}
             />
@@ -201,4 +146,4 @@ export default function QuoteList(props: Props) {
       )}
     </Droppable>
   );
-}
+};
