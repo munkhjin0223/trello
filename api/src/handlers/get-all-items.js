@@ -26,11 +26,11 @@ exports.getAllItemsHandler = async event => {
     TableName: tableName
   };
   const data = await docClient.scan(params).promise();
-  const items = data.Items;
+  const items = data.Items || [];
 
   const response = {
     statusCode: 200,
-    body: `List: ${JSON.stringify(items)}`
+    body: JSON.stringify([...items, { id: 'test' }])
   };
 
   // All log statements are written to CloudWatch
