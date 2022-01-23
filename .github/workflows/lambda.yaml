@@ -24,4 +24,4 @@ jobs:
         run: |
           cd api
           sam build --use-container
-          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-app --s3-bucket ${{ secrets.AWS_REGION }} --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-app --s3-bucket ${{ secrets.AWS_BUCKET }} --capabilities CAPABILITY_IAM --region ${{ secrets.AWS_REGION }}
