@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "webpack serve --",
-    "test": "jest --forceExit",
+    "test": "jest --detectOpenHandles --forceExit",
     "lint": "eslint src/**/*",
     "build": "webpack",
     "predeploy": "yarn build",
