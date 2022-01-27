@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - 'api/**'
-      - .github/workflows/lambda.yaml
+      - .github/workflows/api.yaml
 
 jobs:
   build_and_deploy:
