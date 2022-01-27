@@ -17,21 +17,27 @@ jobs:
 
       - name: Test
         run: |
+          cd ui
           yarn test
 
       - name: Install dependencies
         run: |
+          cd ui
           yarn install --frozen-lockfile
 
       - name: Tsc
         run: |
+          cd ui
           yarn tsc
 
       - name: Build
         run: |
+          cd ui
           yarn build
 
       - name: Deploy
+        run: |
+          cd ui
         uses: crazy-max/ghaction-github-pages@v1
         with:
           target_branch: gh-pages
