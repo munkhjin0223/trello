@@ -17,7 +17,7 @@ export type Author = {
 export type Item = {
   id: Id;
   content: string;
-  author: Author;
+  authorId: string;
   columnId: string;
 };
 

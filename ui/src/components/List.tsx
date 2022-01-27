@@ -22,15 +22,8 @@ type Props = {
   listType?: string;
   items: Item[];
   title?: string;
-  internalScroll?: boolean;
-  scrollContainerStyle?: Object;
   isDropDisabled?: boolean;
-  isCombineEnabled?: boolean;
   style?: Object;
-  // may not be provided - and might be null
-  ignoreContainerClipping?: boolean;
-
-  useClone?: boolean;
 };
 
 type ItemListProps = {
@@ -50,7 +43,6 @@ const InnerList = memo(function InnerList(props: ItemListProps) {
               key={item.id}
               item={item}
               isDragging={dragSnapshot.isDragging}
-              isGroupedOver={Boolean(dragSnapshot.combineTargetFor)}
               provided={dragProvided}
             />
           )}
@@ -83,39 +75,16 @@ function InnerListContainer(props: InnerListProps) {
 
 export default (props: Props) => {
   const {
-    ignoreContainerClipping,
-    internalScroll,
-    scrollContainerStyle,
     isDropDisabled,
-    isCombineEnabled,
     listId = 'LIST',
     listType,
     style,
     items,
-    title,
-    useClone
+    title
   } = props;
 
   return (
-    <Droppable
-      droppableId={listId}
-      type={listType}
-      ignoreContainerClipping={ignoreContainerClipping}
-      isDropDisabled={isDropDisabled}
-      isCombineEnabled={isCombineEnabled}
-      renderClone={
-        useClone
-          ? (provided, snapshot, descriptor) => (
-              <ItemComponent
-                item={items[descriptor.source.index]}
-                provided={provided}
-                isDragging={snapshot.isDragging}
-                isClone
-              />
-            )
-          : null
-      }
-    >
+    <Droppable droppableId={listId} type={listType}>
       {(
         dropProvided: DroppableProvided,
         dropSnapshot: DroppableStateSnapshot
@@ -127,21 +96,11 @@ export default (props: Props) => {
           isDraggingFrom={Boolean(dropSnapshot.draggingFromThisWith)}
           {...dropProvided.droppableProps}
         >
-          {internalScroll ? (
-            <ScrollContainer style={scrollContainerStyle}>
-              <InnerListContainer
-                items={items}
-                title={title}
-                dropProvided={dropProvided}
-              />
-            </ScrollContainer>
-          ) : (
-            <InnerListContainer
-              items={items}
-              title={title}
-              dropProvided={dropProvided}
-            />
-          )}
+          <InnerListContainer
+            items={items}
+            title={title}
+            dropProvided={dropProvided}
+          />
         </Wrapper>
       )}
     </Droppable>

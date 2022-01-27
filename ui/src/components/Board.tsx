@@ -15,12 +15,6 @@ import Column from './Column';
 import { reorder, reorderItemMap } from '../utils';
 import { columns } from '../data';
 
-const ParentContainer = styled.div`
-  height: ${({ height }: { height: string }) => height};
-  overflow-x: hidden;
-  overflow-y: auto;
-`;
-
 const Container = styled.div`
   background-color: ${colors.B100};
   min-height: 100vh;
@@ -30,11 +24,8 @@ const Container = styled.div`
 `;
 
 type Props = {
-  initial: ItemMap;
+  initial?: ItemMap;
   withScrollableColumns?: boolean;
-  isCombineEnabled?: boolean;
-  containerHeight?: string;
-  useClone?: boolean;
 };
 
 type State = {
@@ -43,41 +34,17 @@ type State = {
 };
 
 export default class Board extends Component<Props, State> {
-  /* eslint-disable react/sort-comp */
-  static defaultProps = {
-    isCombineEnabled: false
-  };
-
   state: State = {
-    itemMap: this.props.initial,
-    ordered: Object.keys(this.props.initial)
+    itemMap: this.props.initial || {},
+    ordered: Object.keys(this.props.initial || {})
   };
 
   boardRef?: HTMLElement;
 
   onDragEnd = (result: DropResult) => {
-    if (result.combine) {
-      if (result.type === 'COLUMN') {
-        const shallow: string[] = [...this.state.ordered];
-        shallow.splice(result.source.index, 1);
-        this.setState({ ordered: shallow });
-        return;
-      }
-
-      const column: Item[] = this.state.itemMap[result.source.droppableId];
-      const withItemRemoved: Item[] = [...column];
-      withItemRemoved.splice(result.source.index, 1);
-      const itemMap: ItemMap = {
-        ...this.state.itemMap,
-        [result.source.droppableId]: withItemRemoved
-      };
-      this.setState({ itemMap });
-      return;
-    }
-
     // dropped nowhere
     if (!result.destination) {
-      return;
+      return true;
     }
 
     const source: DraggableLocation = result.source;
@@ -88,7 +55,7 @@ export default class Board extends Component<Props, State> {
       source.droppableId === destination.droppableId &&
       source.index === destination.index
     ) {
-      return;
+      return true;
     }
 
     // reordering column
@@ -103,7 +70,7 @@ export default class Board extends Component<Props, State> {
         ordered
       });
 
-      return;
+      return true;
     }
 
     const data = reorderItemMap({
@@ -113,6 +80,8 @@ export default class Board extends Component<Props, State> {
     });
 
     this.setState({ itemMap: data.itemMap });
+
+    return true;
   };
 
   addNew = (item: Item) => {
@@ -129,20 +98,12 @@ export default class Board extends Component<Props, State> {
   render() {
     const { itemMap, ordered } = this.state;
 
-    const {
-      containerHeight,
-      useClone,
-      isCombineEnabled,
-      withScrollableColumns
-    } = this.props;
-
     const board = (
       <Droppable
         droppableId='board'
         type='COLUMN'
         direction='horizontal'
-        ignoreContainerClipping={Boolean(containerHeight)}
-        isCombineEnabled={isCombineEnabled}
+        ignoreContainerClipping={false}
       >
         {(provided: DroppableProvided) => (
           <Container ref={provided.innerRef} {...provided.droppableProps}>
@@ -154,9 +115,6 @@ export default class Board extends Component<Props, State> {
                 id={key}
                 title={columns.find(c => c.id === key).name}
                 items={itemMap[key]}
-                isScrollable={withScrollableColumns}
-                isCombineEnabled={isCombineEnabled}
-                useClone={useClone}
               />
             ))}
             {provided.placeholder}
@@ -167,13 +125,7 @@ export default class Board extends Component<Props, State> {
 
     return (
       <Fragment>
-        <DragDropContext onDragEnd={this.onDragEnd}>
-          {containerHeight ? (
-            <ParentContainer height={containerHeight}>{board}</ParentContainer>
-          ) : (
-            board
-          )}
-        </DragDropContext>
+        <DragDropContext onDragEnd={this.onDragEnd}>{board}</DragDropContext>
         <Global
           styles={css`
             body {

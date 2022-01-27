@@ -36,23 +36,11 @@ type Props = {
   title: string;
   items: Item[];
   index: number;
-  isScrollable?: boolean;
-  isCombineEnabled?: boolean;
-  useClone?: boolean;
   id: string;
   addNew: (item: Item) => void;
 };
 
-export default ({
-  title,
-  items,
-  index,
-  isScrollable,
-  isCombineEnabled,
-  useClone,
-  addNew,
-  id
-}: Props) => {
+export default ({ title, items, index, addNew, id }: Props) => {
   return (
     <Draggable draggableId={id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -72,15 +60,12 @@ export default ({
               backgroundColor: snapshot.isDragging ? colors.G50 : null
             }}
             items={items}
-            internalScroll={isScrollable}
-            isCombineEnabled={Boolean(isCombineEnabled)}
-            useClone={Boolean(useClone)}
           />
           <AddNew
             onClick={() =>
               addNew({
                 id: Math.random().toString(),
-                author: authors[0],
+                authorId: authors[0].id,
                 content: 'New',
                 columnId: id
               })

@@ -10,54 +10,39 @@ import {
   Footer,
   ItemContainer
 } from '../styles';
+import { authors } from '../data';
 
 type Props = {
   item: Item;
   isDragging: boolean;
   provided: DraggableProvided;
-  isClone?: boolean;
-  isGroupedOver?: boolean;
-  style?: Object;
   index?: number;
 };
 
-function getStyle(provided: DraggableProvided, style: any) {
-  if (!style) {
-    return provided.draggableProps.style;
-  }
-
-  return {
-    ...provided.draggableProps.style,
-    ...style
-  };
-}
-
 function ItemComponent(props: Props) {
-  const { item, isDragging, isGroupedOver, provided, style, isClone, index } =
-    props;
+  const { item, isDragging, provided, index } = props;
+
+  const author = authors.find(a => a.id === item.authorId);
 
   return (
     <ItemContainer
-      href={item.author.url}
+      href={author.url}
       isDragging={isDragging}
-      isGroupedOver={isGroupedOver}
-      isClone={isClone}
-      colors={item.author.colors}
+      colors={author.colors}
       ref={provided.innerRef}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
-      style={getStyle(provided, style)}
+      style={provided.draggableProps.style}
       data-is-dragging={isDragging}
       data-testid={item.id}
       data-index={index}
-      aria-label={`${item.author.name} item ${item.content}`}
+      aria-label={`${author.name} item ${item.content}`}
     >
-      <Avatar src={item.author.avatarUrl} alt={item.author.name} />
-      {isClone ? <CloneBadge>Clone</CloneBadge> : null}
+      <Avatar src={author.avatarUrl} alt={author.name} />
       <Content>
         <BlockItem>{item.content}</BlockItem>
         <Footer>
-          <Author colors={item.author.colors}>{item.author.name}</Author>
+          <Author colors={author.colors}>{author.name}</Author>
         </Footer>
       </Content>
     </ItemContainer>
