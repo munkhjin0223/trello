@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1643257985942" clover="3.2.0">
-  <project timestamp="1643257985942" name="All files">
+<coverage generated="1643262060975" clover="3.2.0">
+  <project timestamp="1643262060975" name="All files">
     <metrics statements="44" coveredstatements="44" conditionals="19" coveredconditionals="15" methods="18" coveredmethods="18" elements="81" coveredelements="77" complexity="0" loc="44" ncloc="44" packages="1" files="4" classes="4"/>
     <file name="Board.tsx" path="/Users/munkhjin/Documents/workspace/trello/ui/src/components/Board.tsx">
       <metrics statements="25" coveredstatements="25" conditionals="12" coveredconditionals="12" methods="6" coveredmethods="6"/>

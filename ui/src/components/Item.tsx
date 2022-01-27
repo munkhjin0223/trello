@@ -38,7 +38,12 @@ function ItemComponent(props: Props) {
       data-index={index}
       aria-label={`${author.name} item ${item.content}`}
     >
-      <Avatar src={author.avatarUrl} alt={author.name} />
+      <Avatar
+        src={
+          'https://i.picsum.photos/id/326/200/200.jpg?hmac=T_9V3kc7xrK46bj8WndwDhPuvpbjnAM3wfL_I7Gu6yA'
+        }
+        alt={author.name}
+      />
       <Content>
         <BlockItem>{item.content}</BlockItem>
         <Footer>

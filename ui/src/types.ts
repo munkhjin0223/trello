@@ -9,7 +9,6 @@ export type AuthorColors = {
 export type Author = {
   id: Id;
   name: string;
-  avatarUrl: string;
   url: string;
   colors: AuthorColors;
 };

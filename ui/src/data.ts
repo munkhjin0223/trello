@@ -1,16 +1,10 @@
 import { colors } from '@atlaskit/theme';
 import type { Author, Item, ItemMap } from './types';
 
-const finnImg = '/images/finn-min.png';
-const bmoImg = '/images/bmo-min.png';
-const princessImg = '/images/princess-min.png';
-const jakeImg = '/images/jake-min.png';
-
 const jake: Author = {
   id: '1',
   name: 'Jake',
   url: 'http://adventuretime.wikia.com/wiki/Jake',
-  avatarUrl: jakeImg,
   colors: {
     soft: colors.Y50,
     hard: colors.N400A
@@ -21,7 +15,6 @@ const BMO: Author = {
   id: '2',
   name: 'BMO',
   url: 'http://adventuretime.wikia.com/wiki/BMO',
-  avatarUrl: bmoImg,
   colors: {
     soft: colors.G50,
     hard: colors.N400A
@@ -32,7 +25,6 @@ const finn: Author = {
   id: '3',
   name: 'Finn',
   url: 'http://adventuretime.wikia.com/wiki/Finn',
-  avatarUrl: finnImg,
   colors: {
     soft: colors.B50,
     hard: colors.N400A
@@ -43,7 +35,6 @@ const princess: Author = {
   id: '4',
   name: 'Princess bubblegum',
   url: 'http://adventuretime.wikia.com/wiki/Princess_Bubblegum',
-  avatarUrl: princessImg,
   colors: {
     soft: colors.P50,
     hard: colors.N400A
