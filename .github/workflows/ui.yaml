@@ -15,15 +15,15 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test
-        run: |
-          cd ui
-          yarn test
-
       - name: Install dependencies
         run: |
           cd ui
           yarn install --frozen-lockfile
+
+      - name: Test
+        run: |
+          cd ui
+          yarn test
 
       - name: Tsc
         run: |
