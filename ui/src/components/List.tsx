@@ -8,14 +8,8 @@ import {
   DraggableStateSnapshot
 } from 'react-beautiful-dnd';
 import ItemComponent from './Item';
-import {
-  ListContainer,
-  DropZone,
-  ScrollContainer,
-  Title,
-  Wrapper
-} from '../styles';
-import type { Item } from '../types';
+import { ListContainer, DropZone, Title, Wrapper } from '../styles';
+import type { Author, Item } from '../types';
 
 type Props = {
   listId?: string;
@@ -24,10 +18,12 @@ type Props = {
   title?: string;
   isDropDisabled?: boolean;
   style?: Object;
+  authors: Author[];
 };
 
 type ItemListProps = {
   items: Item[];
+  authors: Author[];
 };
 
 const InnerList = memo(function InnerList(props: ItemListProps) {
@@ -40,6 +36,7 @@ const InnerList = memo(function InnerList(props: ItemListProps) {
             dragSnapshot: DraggableStateSnapshot
           ) => (
             <ItemComponent
+              authors={props.authors}
               key={item.id}
               item={item}
               isDragging={dragSnapshot.isDragging}
@@ -56,17 +53,18 @@ type InnerListProps = {
   dropProvided: DroppableProvided;
   items: Item[];
   title?: string;
+  authors: Author[];
 };
 
 function InnerListContainer(props: InnerListProps) {
-  const { items, dropProvided } = props;
+  const { items, dropProvided, authors } = props;
   const title = props.title ? <Title>{props.title}</Title> : null;
 
   return (
     <ListContainer>
       {title}
       <DropZone ref={dropProvided.innerRef}>
-        <InnerList items={items} />
+        <InnerList items={items} authors={authors} />
         {dropProvided.placeholder}
       </DropZone>
     </ListContainer>
@@ -80,7 +78,8 @@ export default (props: Props) => {
     listType,
     style,
     items,
-    title
+    title,
+    authors
   } = props;
 
   return (
@@ -98,6 +97,7 @@ export default (props: Props) => {
         >
           <InnerListContainer
             items={items}
+            authors={authors}
             title={title}
             dropProvided={dropProvided}
           />

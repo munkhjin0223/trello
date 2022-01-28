@@ -1,8 +1,5 @@
 // Create clients and set shared const values outside of the handler.
 
-// Get the DynamoDB table name from environment variables
-const tableName = process.env.SAMPLE_TABLE;
-
 // Create a DocumentClient that represents the query to add an item
 const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
@@ -22,18 +19,25 @@ exports.getAllItemsHandler = async event => {
   // get all items from the table (only first 1MB data, you can use `LastEvaluatedKey` to get the rest of data)
   // https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/DynamoDB/DocumentClient.html#scan-property
   // https://docs.aws.amazon.com/amazondynamodb/latest/APIReference/API_Scan.html
-  var params = {
-    TableName: tableName
-  };
-  const data = await docClient.scan(params).promise();
-  const items = data.Items || [];
+  const itemData = await docClient.scan({ TableName: 'items' }).promise();
+  const items = itemData.Items || [];
+
+  const authorData = await docClient.scan({ TableName: 'authors' }).promise();
+  const authors = authorData.Items || [];
+
+  const columnData = await docClient.scan({ TableName: 'columns' }).promise();
+  const columns = columnData.Items || [];
 
   const response = {
     statusCode: 200,
     headers: {
       'Access-Control-Allow-Origin': '*'
     },
-    body: JSON.stringify([...items, { id: 'test' }])
+    body: JSON.stringify({
+      items,
+      authors,
+      columns
+    })
   };
 
   // All log statements are written to CloudWatch

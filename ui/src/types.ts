@@ -1,6 +1,8 @@
 // @flow
 export type Id = string;
 
+export type Column = { id: string; name: string };
+
 export type AuthorColors = {
   soft: string;
   hard: string;

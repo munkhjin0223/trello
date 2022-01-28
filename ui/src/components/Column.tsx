@@ -8,8 +8,7 @@ import {
 } from 'react-beautiful-dnd';
 import List from './List';
 import { AddNew, Title } from '../styles';
-import type { Item } from '../types';
-import { authors } from '../data';
+import type { Author, Item } from '../types';
 
 const Container = styled.div`
   margin: ${grid}px;
@@ -37,10 +36,11 @@ type Props = {
   items: Item[];
   index: number;
   id: string;
+  authors: Author[];
   addNew: (item: Item) => void;
 };
 
-export default ({ title, items, index, addNew, id }: Props) => {
+export default ({ title, items, index, addNew, id, authors }: Props) => {
   return (
     <Draggable draggableId={id} index={index}>
       {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
@@ -60,6 +60,7 @@ export default ({ title, items, index, addNew, id }: Props) => {
               backgroundColor: snapshot.isDragging ? colors.G50 : null
             }}
             items={items}
+            authors={authors}
           />
           <AddNew
             onClick={() =>

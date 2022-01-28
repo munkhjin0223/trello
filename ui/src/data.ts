@@ -1,5 +1,5 @@
 import { colors } from '@atlaskit/theme';
-import type { Author, Item, ItemMap } from './types';
+import type { Author, Column, Item, ItemMap } from './types';
 
 const jake: Author = {
   id: '1',
@@ -40,8 +40,6 @@ const princess: Author = {
     hard: colors.N400A
   }
 };
-
-type Column = { id: string; name: string };
 
 export const columns: Column[] = [
   {
@@ -141,7 +139,7 @@ export const items: Item[] = [
 
 export const authors: Author[] = [jake, BMO, finn, princess];
 
-const getByColumn = (column: Column, items: Item[]): Item[] =>
+export const getByColumn = (column: Column, items: Item[]): Item[] =>
   items.filter((item: Item) => item.columnId === column.id);
 
 export const authorItemMap: ItemMap = columns.reduce(

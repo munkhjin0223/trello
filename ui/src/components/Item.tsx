@@ -1,26 +1,25 @@
 import { memo } from 'react';
-import type { Item } from '../types';
+import type { Author as AuthorType, Item } from '../types';
 import type { DraggableProvided } from 'react-beautiful-dnd';
 import {
   Author,
   Avatar,
   BlockItem,
-  CloneBadge,
   Content,
   Footer,
   ItemContainer
 } from '../styles';
-import { authors } from '../data';
 
 type Props = {
   item: Item;
   isDragging: boolean;
   provided: DraggableProvided;
   index?: number;
+  authors: AuthorType[];
 };
 
 function ItemComponent(props: Props) {
-  const { item, isDragging, provided, index } = props;
+  const { item, isDragging, provided, index, authors } = props;
 
   const author = authors.find(a => a.id === item.authorId);
 
