@@ -20,10 +20,10 @@ jobs:
           cd ui
           yarn install --frozen-lockfile
 
-      - name: Test
-        run: |
-          cd ui
-          yarn test
+      # - name: Test
+      #   run: |
+      #     cd ui
+      #     yarn test
 
       - name: Tsc
         run: |
