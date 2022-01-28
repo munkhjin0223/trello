@@ -1,13 +1,9 @@
 import { axiosInstance } from '../';
 import { useEffect, useState } from 'react';
 import Board from '../components/Board';
-import { Item, ItemMap, Column } from '../types';
+import { initialItemMap } from '../utils';
 
-type Props = {
-  initial?: ItemMap;
-};
-
-export default function BoardContainer(props: Props) {
+export default function BoardContainer() {
   const [loading, setLoading] = useState(true);
   const [authors, setAuthors] = useState([]);
   const [items, setItems] = useState([]);
@@ -32,16 +28,7 @@ export default function BoardContainer(props: Props) {
     return <div>...</div>;
   }
 
-  const getByColumn = (column: Column, items: Item[]): Item[] =>
-    items.filter((item: Item) => item.columnId === column.id);
+  const initial = initialItemMap(columns, items, authors);
 
-  const initial = columns.reduce(
-    (previous: ItemMap, column: Column) => ({
-      ...previous,
-      [column.id]: getByColumn(column, items)
-    }),
-    {}
-  );
-
-  return <Board initial={initial} authors={authors} />;
+  return <Board initial={initial} columns={columns} />;
 }

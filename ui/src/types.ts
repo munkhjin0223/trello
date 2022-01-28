@@ -20,6 +20,7 @@ export type Item = {
   content: string;
   authorId: string;
   columnId: string;
+  author?: Author;
 };
 
 export type ItemMap = {

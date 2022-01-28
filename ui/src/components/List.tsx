@@ -18,12 +18,10 @@ type Props = {
   title?: string;
   isDropDisabled?: boolean;
   style?: Object;
-  authors: Author[];
 };
 
 type ItemListProps = {
   items: Item[];
-  authors: Author[];
 };
 
 const InnerList = memo(function InnerList(props: ItemListProps) {
@@ -36,7 +34,6 @@ const InnerList = memo(function InnerList(props: ItemListProps) {
             dragSnapshot: DraggableStateSnapshot
           ) => (
             <ItemComponent
-              authors={props.authors}
               key={item.id}
               item={item}
               isDragging={dragSnapshot.isDragging}
@@ -53,18 +50,17 @@ type InnerListProps = {
   dropProvided: DroppableProvided;
   items: Item[];
   title?: string;
-  authors: Author[];
 };
 
 function InnerListContainer(props: InnerListProps) {
-  const { items, dropProvided, authors } = props;
+  const { items, dropProvided } = props;
   const title = props.title ? <Title>{props.title}</Title> : null;
 
   return (
     <ListContainer>
       {title}
       <DropZone ref={dropProvided.innerRef}>
-        <InnerList items={items} authors={authors} />
+        <InnerList items={items} />
         {dropProvided.placeholder}
       </DropZone>
     </ListContainer>
@@ -78,8 +74,7 @@ export default (props: Props) => {
     listType,
     style,
     items,
-    title,
-    authors
+    title
   } = props;
 
   return (
@@ -97,7 +92,6 @@ export default (props: Props) => {
         >
           <InnerListContainer
             items={items}
-            authors={authors}
             title={title}
             dropProvided={dropProvided}
           />

@@ -15,13 +15,11 @@ type Props = {
   isDragging: boolean;
   provided: DraggableProvided;
   index?: number;
-  authors: AuthorType[];
 };
 
 function ItemComponent(props: Props) {
-  const { item, isDragging, provided, index, authors } = props;
-
-  const author = authors.find(a => a.id === item.authorId);
+  const { item, isDragging, provided, index } = props;
+  const author = item.author;
 
   return (
     <ItemContainer

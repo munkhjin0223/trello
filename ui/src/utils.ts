@@ -1,5 +1,5 @@
 import { colors } from '@atlaskit/theme';
-import type { AuthorColors, Item, ItemMap } from './types';
+import type { Author, AuthorColors, Column, Item, ItemMap } from './types';
 import type { DraggableLocation } from 'react-beautiful-dnd';
 
 // a little function to help us with reordering the result
@@ -97,3 +97,28 @@ export const getBorderColor = (
   isDragging: boolean,
   authorColors: AuthorColors
 ) => (isDragging ? authorColors.hard : 'transparent');
+
+const getByColumn = (
+  column: Column,
+  items: Item[],
+  authorList: Author[]
+): Item[] =>
+  items
+    .filter((item: Item) => item.columnId === column.id)
+    .map((item: Item) => ({
+      ...item,
+      author: authorList.find(a => a.id === item.authorId)
+    }));
+
+export const initialItemMap = (
+  list: Column[],
+  itemList: Item[],
+  authorList: Author[]
+): ItemMap =>
+  list.reduce(
+    (previous: ItemMap, column: Column) => ({
+      ...previous,
+      [column.id]: getByColumn(column, itemList, authorList)
+    }),
+    {}
+  );

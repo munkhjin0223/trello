@@ -1,10 +1,18 @@
 import { mount } from 'enzyme';
 import Board from '../src/components/Board';
 import Column from '../src/components/Column';
-import { authorItemMap, authors, columns } from '../src/data';
+import { authors, columns, items } from '../static/data';
 import { AddNew } from '../src/styles';
+import { initialItemMap } from '../src/utils';
+import { ItemMap } from '../src/types';
 
 describe('Board component', () => {
+  let initial: ItemMap = {};
+
+  beforeEach(() => {
+    initial = initialItemMap(columns, items, authors);
+  });
+
   test('No destination', () => {
     const BoardComponent = mount(<Board />);
 
@@ -27,7 +35,7 @@ describe('Board component', () => {
   });
 
   test('Type is COLUMN', () => {
-    const BoardComponent = mount(<Board initial={authorItemMap} />);
+    const BoardComponent = mount(<Board initial={initial} columns={columns} />);
 
     const result = BoardComponent.find('DragDropContext').prop('onDragEnd');
 
@@ -41,7 +49,7 @@ describe('Board component', () => {
   });
 
   test('Type is ITEM', () => {
-    const BoardComponent = mount(<Board initial={authorItemMap} />);
+    const BoardComponent = mount(<Board initial={initial} columns={columns} />);
 
     const result = BoardComponent.find('DragDropContext').prop('onDragEnd');
 
@@ -55,7 +63,7 @@ describe('Board component', () => {
   });
 
   test('Type is addNew', () => {
-    const BoardComponent = mount(<Board initial={authorItemMap} />);
+    const BoardComponent = mount(<Board initial={initial} columns={columns} />);
 
     const result = BoardComponent.find(Column).at(0).prop('addNew');
 
@@ -63,12 +71,13 @@ describe('Board component', () => {
       id: 'fakeId',
       content: 'content',
       authorId: authors[0].id,
-      columnId: columns[0].id
+      columnId: columns[0].id,
+      author: authors[0]
     });
   });
 
   test('Type is addNew for Columnt', () => {
-    const BoardComponent = mount(<Board initial={authorItemMap} />);
+    const BoardComponent = mount(<Board initial={initial} columns={columns} />);
 
     const onClick = BoardComponent.find(Column)
       .at(0)

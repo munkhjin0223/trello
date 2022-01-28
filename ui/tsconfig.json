@@ -10,5 +10,5 @@
     "allowSyntheticDefaultImports": true
   },
   "types": ["@emotion/react/types/css-prop"],
-  "include": ["src/", "index.d.ts", "__tests__/"]
+  "include": ["src/", "index.d.ts", "__tests__/", "static/data.ts"]
 }

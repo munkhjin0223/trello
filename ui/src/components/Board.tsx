@@ -10,10 +10,9 @@ import {
 
 import styled from '@emotion/styled';
 import { colors } from '@atlaskit/theme';
-import type { ItemMap, Item, Author } from '../types';
+import type { ItemMap, Item, Column as ColumnType } from '../types';
 import Column from './Column';
 import { reorder, reorderItemMap } from '../utils';
-import { columns } from '../data';
 
 const Container = styled.div`
   background-color: ${colors.B100};
@@ -25,7 +24,7 @@ const Container = styled.div`
 
 type Props = {
   initial?: ItemMap;
-  authors?: Author[];
+  columns?: ColumnType[];
 };
 
 type State = {
@@ -113,8 +112,7 @@ export default class Board extends Component<Props, State> {
                 key={key}
                 index={index}
                 id={key}
-                authors={this.props.authors}
-                title={columns.find(c => c.id === key).name}
+                title={this.props.columns.find(c => c.id === key).name}
                 items={itemMap[key]}
               />
             ))}
