@@ -3,8 +3,8 @@ name: Lambda
 on:
   push:
     paths:
-      - 'api/**'
-      - .github/workflows/api.yaml
+      - 'serverless/**'
+      - .github/workflows/serverless.yaml
 
 jobs:
   build_and_deploy:
@@ -22,6 +22,6 @@ jobs:
 
       - name: Build and deploy
         run: |
-          cd api
+          cd serverless
           sam build --use-container
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-app --s3-bucket trello-serverless --capabilities CAPABILITY_IAM --region us-east-1
