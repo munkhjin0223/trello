@@ -1,11 +1,14 @@
 import { connect } from './db/connection';
 import UserModel from './db/models/Users';
+import main from './worker/main';
 
 const express = require('express');
 const app = express();
 const port = 3000;
 
 app.get('/', (_req, res) => {
+  main();
+
   res.send('Hello World');
 });
 
