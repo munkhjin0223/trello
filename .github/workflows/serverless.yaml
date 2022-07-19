@@ -22,6 +22,6 @@ jobs:
 
       - name: Build and deploy
         run: |
-          cd serverless
+          cd packages/serverless
           sam build --use-container
           sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name sam-app --s3-bucket trello-serverless --capabilities CAPABILITY_IAM --region us-east-1
