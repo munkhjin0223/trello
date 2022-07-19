@@ -3,7 +3,7 @@ name: Trello workflow
 on:
   push:
     paths:
-      - 'ui/**'
+      - 'packages/ui/**'
       - '.github/workflows/ui.yaml'
 
 jobs:

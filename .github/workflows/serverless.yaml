@@ -3,7 +3,7 @@ name: Lambda
 on:
   push:
     paths:
-      - 'serverless/**'
+      - 'packages/serverless/**'
       - .github/workflows/serverless.yaml
 
 jobs:
