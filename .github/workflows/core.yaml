@@ -3,8 +3,8 @@ name: Trello workflow
 on:
   push:
     paths:
-      - 'packages/ui/**'
-      - '.github/workflows/ui.yaml'
+      - 'packages/core/**'
+      - '.github/workflows/core.yaml'
 
 jobs:
   build_and_deploy:
@@ -17,28 +17,28 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd packages/ui
+          cd packages/core
           yarn install --frozen-lockfile
 
       # - name: Test
       #   run: |
-      #     cd packages/ui
+      #     cd packages/core
       #     yarn test
 
-      - name: Tsc
-        run: |
-          cd packages/ui
-          yarn tsc
+      # - name: Tsc
+      #   run: |
+      #     cd packages/core
+      #     yarn tsc
 
       - name: Build
         run: |
-          cd packages/ui
+          cd packages/core
           yarn build
 
       - name: Deploy
         uses: crazy-max/ghaction-github-pages@v1
         with:
           target_branch: gh-pages
-          build_dir: packages/ui/dist
+          build_dir: packages/core/dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

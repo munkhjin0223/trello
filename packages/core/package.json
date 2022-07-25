@@ -1,5 +1,5 @@
 {
-  "name": "Trello",
+  "name": "trello",
   "version": "1.0.0",
   "main": "src/index.tsx",
   "repository": "git@github.com:munkhjin0223/trello.git",
