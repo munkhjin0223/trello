@@ -62,6 +62,10 @@ module.exports = {
       filename: 'remoteEntry.js',
       remotes: {
         commonui: 'commonui@//localhost:3001/remoteEntry.js'
+      },
+      shared: {
+        react: { singleton: true, eager: true },
+        'react-dom': { singleton: true, eager: true }
       }
     })
   ]
