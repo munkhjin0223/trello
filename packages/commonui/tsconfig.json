@@ -2,19 +2,12 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "esnext",
+    "module": "es6",
     "target": "es5",
     "jsx": "react-jsx",
     "allowJs": true,
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
-  "types": ["@emotion/react/types/css-prop"],
-  "include": [
-    "src/",
-    "index.d.ts",
-    "commonui.d.ts",
-    "__tests__/",
-    "static/data.ts"
-  ]
+  "include": ["src/"]
 }

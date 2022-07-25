@@ -1,4 +1,4 @@
-import { axiosInstance } from '../';
+import { axiosInstance } from '../bootstrap';
 import { useEffect, useState } from 'react';
 import Board from '../components/Board';
 import { initialItemMap } from '../utils';
@@ -18,7 +18,7 @@ export default function BoardContainer() {
         setColumns(data.columns || []);
         setLoading(false);
       })
-      .catch(e => {
+      .catch((e: any) => {
         setLoading(false);
         console.log(e.message);
       });

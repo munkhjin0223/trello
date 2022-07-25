@@ -1,5 +1,5 @@
 import { Global, css } from '@emotion/react';
-import { Component, Fragment } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   DragDropContext,
   Droppable,
@@ -13,6 +13,8 @@ import { colors } from '@atlaskit/theme';
 import type { ItemMap, Item, Column as ColumnType } from '../types';
 import Column from './Column';
 import { reorder, reorderItemMap } from '../utils';
+
+const RemoteButton = React.lazy(() => import('commonui/Button'));
 
 const Container = styled.div`
   background-color: ${colors.B100};
@@ -99,9 +101,9 @@ export default class Board extends Component<Props, State> {
 
     const board = (
       <Droppable
-        droppableId='board'
-        type='COLUMN'
-        direction='horizontal'
+        droppableId="board"
+        type="COLUMN"
+        direction="horizontal"
         ignoreContainerClipping={false}
       >
         {(provided: DroppableProvided) => (
@@ -124,6 +126,9 @@ export default class Board extends Component<Props, State> {
 
     return (
       <Fragment>
+        <React.Suspense fallback="Loading Button">
+          <RemoteButton>Remote button</RemoteButton>
+        </React.Suspense>
         <DragDropContext onDragEnd={this.onDragEnd}>{board}</DragDropContext>
         <Global
           styles={css`
