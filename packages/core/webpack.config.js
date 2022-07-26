@@ -1,5 +1,4 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { ModuleFederationPlugin } = require('webpack').container;
 const path = require('path');
 
 const deps = require('./package.json').dependencies;
@@ -56,17 +55,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'public', 'index.html')
-    }),
-    new ModuleFederationPlugin({
-      name: 'core',
-      filename: 'remoteEntry.js',
-      remotes: {
-        commonui: 'commonui@//localhost:3001/remoteEntry.js'
-      },
-      shared: {
-        react: { singleton: true, eager: true },
-        'react-dom': { singleton: true, eager: true }
-      }
     })
   ]
 };
